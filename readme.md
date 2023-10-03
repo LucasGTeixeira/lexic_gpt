@@ -1,10 +1,23 @@
-## O método ChatCompletion.create funciona como uma decomposição de uma requisição POST.
-1- Escolhe o modelo que fará a requisição
-2- Cria uma variável de mensagem
-2.1- Existem vários roles diferentes, dentre eles, usaremos o role "system" que determina um parâmetro de contexto, que dita o comportamento textual do modelo e também usaremos o role "user" que funciona exatamente como o input do chatGPT web
-3- Determina um numero máximo de tokens da resposta
-4- Determina a "temperatura" do modelo (quanto mais próximo de 0 mais objetivo ele é)
-    - Low temperature (0 to 0.3): More focused, coherent, and conservative outputs.
-    - Medium temperature (0.3 to 0.7): Balanced creativity and coherence.
-    - High temperature (0.7 to 1): Highly creative and diverse, but potentially less coherent.
-(tirado da documentação da biblioteca openai)
+## Descrição do Método ChatCompletion.create
+
+O método `ChatCompletion.create` é uma função que permite a interação com o modelo GPT-3.5 da OpenAI para gerar respostas com base em solicitações de texto. Este método segue um processo de decomposição de uma requisição POST, que pode ser resumido nos seguintes passos:
+
+1. **Escolha do Modelo**: Você deve selecionar o modelo que será usado para a requisição. O modelo escolhido terá um impacto direto na natureza das respostas geradas.
+
+2. **Criação da Mensagem**: Para iniciar a interação com o modelo, você precisa criar uma mensagem. Existem vários papéis (roles) disponíveis, sendo os principais o "system" e o "user". O "system" é usado para definir um contexto global que influenciará o comportamento textual do modelo, enquanto o "user" funciona como a entrada principal, representando a mensagem ou pergunta do usuário.
+
+    2.1. **Role "system"**: Define um parâmetro de contexto global que afeta o comportamento do modelo.
+    
+    2.2. **Role "user"**: Funciona como a entrada do usuário, especificando a mensagem ou pergunta a ser respondida pelo modelo.
+
+3. **Limite de Tokens da Resposta**: É possível determinar o número máximo de tokens que a resposta gerada pelo modelo pode conter. Isso ajuda a controlar o tamanho da resposta e a economizar custos.
+
+4. **Temperatura do Modelo**: A temperatura é um parâmetro que afeta a criatividade das respostas geradas pelo modelo. Ela varia de 0 a 1 e pode ser ajustada da seguinte maneira:
+
+   - Baixa temperatura (0 a 0,3): Produz saídas mais focadas, coerentes e conservadoras.
+   - Temperatura média (0,3 a 0,7): Equilibra criatividade e coerência.
+   - Alta temperatura (0,7 a 1): Gera respostas altamente criativas e diversas, mas potencialmente menos coerentes.
+
+Estas são as etapas essenciais para usar o método `ChatCompletion.create` e aproveitar o modelo GPT-3.5 da OpenAI para gerar respostas textuais personalizadas com base nas suas necessidades.
+
+Para obter informações detalhadas sobre como utilizar esse método, consulte a documentação da biblioteca OpenAI.
