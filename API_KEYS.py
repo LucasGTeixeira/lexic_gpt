@@ -1,1 +1,0 @@
-KEY_TEIXEIRA = "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"

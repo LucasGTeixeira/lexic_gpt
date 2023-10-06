@@ -1,7 +1,7 @@
 import openai
 import time
 import re
-import API_KEYS
+import scripts.API_KEYS as API_KEYS
 
 # API Key
 openai.api_key = API_KEYS.KEY_TEIXEIRA
@@ -67,19 +67,9 @@ def sentence_builder(tweet_dict):
 # Sample sentence corpus
 sentence_corpus = [
     {
-        "sentenca": "O candidato A é o melhor para o país!",
-        "ator": "Candidato A",
-        "conotacao_esperada": 1,
-    },
-    {
-        "sentenca": "Não confio no político B, ele só faz promessas vazias.",
-        "ator": "Político B",
+        "sentenca": 'Perdeu claramente o debate com o Paulinho da Feiras .',
+        "ator": "[]",
         "conotacao_esperada": -1,
-    },
-    {
-        "sentenca": "A reforma da previdência é um tópico importante.",
-        "ator": "Reforma da previdência",
-        "conotacao_esperada": 0,
     },
 ]
 
@@ -117,8 +107,8 @@ for sentence in sentence_corpus:
     
     print(f"===== Requisitions per day left: {REQUISITIONS_PER_DAY} =====")
 
-    if corpus_sentence_index < len(sentence_corpus) - 1:
-        time.sleep(20)  # Pause for 20 seconds except in the last iteration
+    # if corpus_sentence_index < len(sentence_corpus) - 1:
+    #     time.sleep(20)  # Pause for 20 seconds except in the last iteration
     
     if minute_timer >= 60:
         minute_reset()
