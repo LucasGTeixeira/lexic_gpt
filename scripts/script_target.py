@@ -21,7 +21,7 @@ sentence_corpus = []
 output_sentence_corpus = []
 
 #Lendo o corpus original
-df = pd.read_excel('./inputs/teste.xlsx')
+df = pd.read_excel('./inputs/entradas.xlsx')
 df = df[CORPUS_STOP_INDEX:]
 
 def setup_corpus(df, sentence_corpus):
@@ -29,7 +29,7 @@ def setup_corpus(df, sentence_corpus):
     for index, row in df.iterrows():
         sentence = {
             "sentence": row['FRASE'],
-            "alvo_esperado": row['ALVO'],
+            "alvo_esperado": row['ALVOS'],
         }
         sentence_corpus.append(sentence)
 
@@ -37,7 +37,7 @@ def api_requisition(user_message):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Dada uma sentença, identifique e responsa com apenas o conjunto os marcadores de opinião presentes na sentença:"},
+            {"role": "system", "content": "Dada a seguinte sentença, responda no formato ['alvo1'] o(s) alvo(s) de opinião presente(s) na sentença."},
             {"role": "user", "content": user_message}
         ],
         max_tokens=1024,
