@@ -1,7 +1,14 @@
 import openai
 import time
 import re
-import scripts.API_KEYS as API_KEYS
+import pandas as pd
+import os
+import sys
+
+utils_path = os.path.join(os.path.dirname(__file__), '..', 'utils')
+sys.path.append(utils_path)
+
+import API_KEYS
 
 # API Key
 openai.api_key = API_KEYS.KEY_TEIXEIRA
@@ -22,14 +29,15 @@ corpus_sentence_index = -1
 output_divergences_list = []
 
 def api_requisition(user_message):
+    prompt = "Dada uma sentença e seus respectivos marcadores sobre o mesmo alvo de opinião responda apenas com o caracter (-1) se ela possui conotação negativa, (0) se for neutra ou (1) se for positiva"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Dada a seguinte sentença e seu respectivo ator responda apenas com o caracter (-1) se ela possui conotação negativa, (0) se for neutra ou (1) se for positiva"},
+            {"role": "system", "content": prompt},
             {"role": "user", "content": user_message}
         ],
         max_tokens=1024,
-        temperature=0.5
+        temperature=0
     )
     return [response.choices[0].message.content, response.usage]
 
@@ -62,18 +70,20 @@ def add_requisition_credit():
     new_request_timer = 0
 
 def sentence_builder(tweet_dict):
-    return f'sentença: "{tweet_dict["sentenca"]}", ator: {tweet_dict["ator"]}'
+    return f'sentença: "{tweet_dict["sentenca"]}"'
 
-# Sample sentence corpus
+#Neste exemplo estou usando apenas uma sentença para testar a API, mas o processo pode ser escalável para um arquivo excel ou csv contendo milhares de sentenças através do PANDAS
+
+#(Não fiz isso aqui pois no projeto foi utilizada a versão paga da API que não possuia a maior limitação desse script gratuito: Limite de requests diários)
 sentence_corpus = [
     {
-        "sentenca": 'Perdeu claramente o debate com o Paulinho da Feiras .',
+        "sentenca": 'Não voto PS mas gostaria de saber que lhe fez Sócrates para se alinhar descaradamente com o PSD.',
         "ator": "[]",
         "conotacao_esperada": -1,
     },
 ]
 
-# Main loop
+
 for sentence in sentence_corpus:
     if REQUISITIONS_PER_DAY < 1:
         print(f'Task done until index "{corpus_sentence_index}" of the corpus')
@@ -85,8 +95,7 @@ for sentence in sentence_corpus:
     
     print(time.strftime("Request Moment - %Y-%m-%d %H:%M:%S"))
     
-    numeric_response = encontrar_valor_numerico(answer[0])
-    print(f"GPT Output: {numeric_response}")
+    print(f"GPT Output: {answer[0]}")
     
     tokens_used = int(answer[1].total_tokens)
     TOKEN_CREDITS_PER_MINUTE -= tokens_used
@@ -94,16 +103,6 @@ for sentence in sentence_corpus:
     print(f"Tokens Used: {tokens_used}")
     print(f"Avaluable Tokens: {TOKEN_CREDITS_PER_MINUTE}")
     print(f"Expected Output {sentence['conotacao_esperada']}")
-    
-    if int(sentence["conotacao_esperada"]) != numeric_response:
-        output_divergences_list.append(
-            {
-                "sentenca": sentence["sentenca"],
-                "ator": sentence["ator"],
-                "gpt_output": numeric_response,
-                "conotacao_esperada": sentence["conotacao_esperada"],
-            }
-        )
     
     print(f"===== Requisitions per day left: {REQUISITIONS_PER_DAY} =====")
 
