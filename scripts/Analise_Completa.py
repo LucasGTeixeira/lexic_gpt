@@ -8,11 +8,10 @@ import sys
 utils_path = os.path.join(os.path.dirname(__file__), '..', 'utils')
 sys.path.append(utils_path)
 
-import API_KEYS
-
+from utils.API_KEYS import KEY_TEIXEIRA
 
 # API Key
-openai.api_key = API_KEYS.KEY_TEIXEIRA
+openai.api_key = KEY_TEIXEIRA
 
 # Counters
 MINUTE_TIMER = 0
@@ -41,7 +40,7 @@ def setup_corpus(df, sentence_corpus):
 
 def api_requisition(user_message):
     prompt_system = "Dada a seguinte sentença, responda no formato ['alvo1','alvo2','alvo3'], [1,-1,0] o(s) alvo(s) de opinião presente(s) na sentença bem como sua(s) respectiva(s) polaridade(s) com o caracter (-1) se ela possui conotação negativa, (0) se for neutra ou (1) se for positiva"
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": prompt_system},
